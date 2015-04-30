@@ -26,7 +26,7 @@ def index():
         current = plr.current_track
         for t in plr.tracks:
             b, be = "", ""
-            if int(t) == int(current):
+            if t == current:
                 b, be = "<b>", "</b>"
 
             b += "<a href={0}track/{1}>".format(ppath, int(t))

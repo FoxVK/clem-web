@@ -110,6 +110,14 @@ class Track:
     def __len__(self):
         return self.__length
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        return int(other) == int(self)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def strlen(self, format="%H:%M:%S"):
         if self.__length < 0:
             return ""
