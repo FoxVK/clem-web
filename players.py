@@ -4,6 +4,8 @@ import time
 
 class Player:
 
+    __d_ses = dbus.SessionBus()
+
     @staticmethod
     def get():
 
@@ -21,11 +23,10 @@ class Player:
     def __init__(self, name):
         self.name = name
 
-        self.d_session_bus = dbus.SessionBus()
-        self.d_player = self.d_session_bus.get_object('org.mpris.'+name, '/Player')
+        self.d_player = Player.__d_ses.get_object('org.mpris.'+name, '/Player')
         self.d_if = dbus.Interface(self.d_player, dbus_interface='org.freedesktop.MediaPlayer')
 
-        self.d_track_list = self.d_session_bus.get_object('org.mpris.'+name, '/TrackList')
+        self.d_track_list = Player.__d_ses.get_object('org.mpris.'+name, '/TrackList')
         self.d_tracks_if = dbus.Interface(self.d_track_list, dbus_interface='org.freedesktop.MediaPlayer')
 
     def play(self):
