@@ -29,9 +29,9 @@ class Card:
         return self.__volume
 
     @volume.setter
-    def volume(self, val):
-        #self.__volume = Volume(self.__cid, self.__vol_ch, val)
-        self.__volume.set(val)
+    def volume(self, value):
+        print("setter",value)
+        self.__volume.set(int(value))
 
     @property
     def default(self):
@@ -39,6 +39,9 @@ class Card:
 
     def __str__(self):
         return self.__name
+
+    def __int__(self):
+        return self.__cid
 
 
 class Volume:
@@ -73,6 +76,21 @@ class Volume:
             pass
         else:
             self.__cmd("sset", self.__out, str(other)+"%+")
+
+    def inc(self, value=1):
+        self += value
+
+    def dec(self, value=1):
+        self -= value
+
+    def __isub__(self, other):
+        other = int(other)
+        if other < 0:
+            self += abs(other)
+        elif other == 0:
+            pass
+        else:
+            self.__cmd("sset", self.__out, str(other)+"%-")
 
     def set(self, value):
         value = int(value)

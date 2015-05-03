@@ -2,6 +2,7 @@
 from _codecs import raw_unicode_escape_decode
 
 import players
+import soundcards
 
 __author__ = 'fox@vsetin.org'
 
@@ -30,6 +31,25 @@ def play(player):
         if p == player:
             p.stop()
             break
+    redirect("/")
+
+
+@route('/card/<cid:int>/inc/<val>')
+def sound_inc(cid, val):
+    print(val)
+    list(soundcards.Card.get())[int(cid)].volume.inc(val)
+    redirect("/")
+
+
+@route('/card/<cid:int>/dec/<val>')
+def sound_inc(cid, val):
+    list(soundcards.Card.get())[int(cid)].volume.dec(val)
+    redirect("/")
+
+
+@route('/card/<cid:int>/set/<val>')
+def sound_inc(cid, val):
+    list(soundcards.Card.get())[int(cid)].volume = val
     redirect("/")
 
 
