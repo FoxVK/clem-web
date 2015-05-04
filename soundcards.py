@@ -7,7 +7,12 @@ class Card:
     @staticmethod
     def get():
         cid = 0
-        for line in subprocess.check_output(["amixer", "info"]).decode().split('\n'):
+        while True:
+            try:
+                line = subprocess.check_output(["amixer", "-c", str(cid), "info"], stderr=subprocess.DEVNULL).decode().split('\n')[0]
+                print(line)
+            except subprocess.CalledProcessError:
+                break
             if line.startswith('Card '):
                 name = line.split("'")[3].split(" at")[0]
                 default = False
@@ -15,13 +20,13 @@ class Card:
                     default = True
 
                 yield Card(name, cid, default)
-                cid += 1
+            cid += 1
 
     def __init__(self, name, cid, default=False):
         self.__default = default
         self.__name = name
         self.__cid = cid
-        self.__vol_ch = "PCM"
+        self.__vol_ch = subprocess.check_output(["amixer", "-c", str(cid)]).decode().split('\n')[0].split("'")[1]
         self.__volume = Volume(self.__cid, self.__vol_ch)
 
     @property
@@ -30,7 +35,6 @@ class Card:
 
     @volume.setter
     def volume(self, value):
-        print("setter",value)
         self.__volume.set(int(value))
 
     @property
